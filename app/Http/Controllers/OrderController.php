@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Ecpay\Sdk\Factories\Factory;
 use Ecpay\Sdk\Services\UrlService;
+use Ecpay\Sdk\Services\CheckMacValueService;
+use Ecpay\Sdk\Response\VerifiedArrayResponse;
 
 class OrderController extends Controller
 {
-    function Order()
+    function Order(Request $request)
     {
-        require 'E:\xampp\htdocs\EC_Pay\vendor\autoload.php';
+        require 'E:\xampp\htdocs\ECPay\vendor\autoload.php';
 
         $factory = new Factory([
             'hashKey' => '5294y06JbISpM5x9',
@@ -30,10 +32,20 @@ class OrderController extends Controller
             'EncryptType' => 1,
 
             // 請參考 example/Payment/GetCheckoutResponse.php 範例開發
-            'ReturnURL' => 'https://www.ecpay.com.tw/example/receive',
+            'ReturnURL' => 'https://8e38-114-33-38-102.ngrok-free.app/success',
+            'ClientBackURL' => 'https://8e38-114-33-38-102.ngrok-free.app/callback',
+            // 'OrderResultURL' => 'https://8e38-114-33-38-102.ngrok-free.app/success',
         ];
-        $action = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';
 
+        // 綠界測試用網址
+        $action = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';
+        // 綠界正式用網址
+        // $action = 'https://payment.ecpay.com.tw/Cashier/AioCheckOut/V5';
         echo $autoSubmitFormService->generate($input, $action);
+    }
+
+    function callback(Request $request)
+    {
+        dd($request->all());
     }
 }
