@@ -22,7 +22,7 @@ class OrderController extends Controller
 
         $input = [
             'MerchantID' => $request['MerchantID'],
-            'MerchantTradeNo' => $request['MerchantID'].time(),
+            'MerchantTradeNo' => $request['MerchantTradeNo'].time(),
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
             'PaymentType' => 'aio',
             'TotalAmount' => $request['TotalAmount'],
@@ -32,8 +32,8 @@ class OrderController extends Controller
             'EncryptType' => 1,
 
             
-            'ReturnURL' => 'https://882a-116-241-203-205.ngrok-free.app/callback',
-            'ClientBackURL' => 'https://882a-116-241-203-205.ngrok-free.app/callback',
+            'ReturnURL' => 'https://04b6-116-241-203-205.ngrok-free.app/callback',
+            'ClientBackURL' => 'https://04b6-116-241-203-205.ngrok-free.app/callback',
         ];
 
         // 綠界測試用網址
