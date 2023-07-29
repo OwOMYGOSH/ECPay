@@ -10,9 +10,9 @@ use Ecpay\Sdk\Response\VerifiedArrayResponse;
 
 class OrderController extends Controller
 {
-    function Order(Request $request)
+    function order(Request $request)
     {
-        require 'E:\xampp\htdocs\ECPay\vendor\autoload.php';
+        require __DIR__ . '../../../../vendor/autoload.php';
 
         $factory = new Factory([
             'hashKey' => '5294y06JbISpM5x9',
@@ -21,20 +21,19 @@ class OrderController extends Controller
         $autoSubmitFormService = $factory->create('AutoSubmitFormWithCmvService');
 
         $input = [
-            'MerchantID' => '2000132',
-            'MerchantTradeNo' => 'Test' . time(),
+            'MerchantID' => $request['MerchantID'],
+            'MerchantTradeNo' => $request['MerchantID'].time(),
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
             'PaymentType' => 'aio',
-            'TotalAmount' => 100,
-            'TradeDesc' => UrlService::ecpayUrlEncode('交易描述範例'),
-            'ItemName' => '範例商品一批 100 TWD x 1',
+            'TotalAmount' => $request['TotalAmount'],
+            'TradeDesc' => UrlService::ecpayUrlEncode($request['TradeDesc']),
+            'ItemName' => $request['ItemName'],
             'ChoosePayment' => 'Credit',
             'EncryptType' => 1,
 
-            // 請參考 example/Payment/GetCheckoutResponse.php 範例開發
-            'ReturnURL' => 'https://8e38-114-33-38-102.ngrok-free.app/success',
-            'ClientBackURL' => 'https://8e38-114-33-38-102.ngrok-free.app/callback',
-            // 'OrderResultURL' => 'https://8e38-114-33-38-102.ngrok-free.app/success',
+            
+            'ReturnURL' => 'https://882a-116-241-203-205.ngrok-free.app/callback',
+            'ClientBackURL' => 'https://882a-116-241-203-205.ngrok-free.app/callback',
         ];
 
         // 綠界測試用網址
@@ -46,6 +45,30 @@ class OrderController extends Controller
 
     function callback(Request $request)
     {
-        dd($request->all());
+        // 請參考 example/Payment/GetCheckoutResponse.php 範例開發
+        require __DIR__ . '../../../../vendor/autoload.php';
+
+        $factory = new Factory([
+                'hashKey' => '5294y06JbISpM5x9',
+                'hashIv' => 'v77hoKGq4kWxNNIS',
+            ]);
+        $checkoutResponse = $factory->create(VerifiedArrayResponse::class);
+
+        $_POST = [
+                'MerchantID' => '2000132',
+                'MerchantTradeNo' => 'WPLL4E341E122DB44D62',
+                'PaymentDate' => '2019/05/09 00:01:21',
+                'PaymentType' => 'Credit_CreditCard',
+                'PaymentTypeChargeFee' => '1',
+                'RtnCode' => '1',
+                'RtnMsg' => '交易成功',
+                'SimulatePaid' => '0',
+                'TradeAmt' => '500',
+                'TradeDate' => '2019/05/09 00:00:18',
+                'TradeNo' => '1905090000188278',
+                'CheckMacValue' => '59B085BAEC4269DC1182D48DEF106B431055D95622EB285DECD400337144C698',
+            ];
+
+        var_dump($checkoutResponse->get($_POST));
     }
 }

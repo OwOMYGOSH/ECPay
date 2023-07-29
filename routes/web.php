@@ -14,13 +14,13 @@ use App\Http\Controllers\OrderController;
 |
 */
 
-Route::get('/order', function () {
-    return view('Order');
+Route::get('/', function () {
+    return view('order');
 });
 
 Route::get('/callback', function () {
     return view('callback');
 });
 
-Route::post('/order', [OrderController::class, 'Order']);
+Route::post('/', [OrderController::class, 'order']);
 Route::get('/callback', [OrderController::class, 'callback']);
